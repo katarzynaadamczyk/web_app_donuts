@@ -15,3 +15,16 @@ python .\services\web\manage.py run
 ctrl+c
 deactivate
 
+to activate project in docker:
+cd katalog-repo
+docker compose up
+
+aby sprawdzić działanie bazy danych można przy uruchomionym serwerze zrobić:
+
+docker compose exec web python manage.py seed_db
+docker-compose exec db psql --username=hello_flask --dbname=hello_flask_dev
+\c - informacja do jakiej bazy jesteśmy podpięci
+\dt - lista tabel w aktualnej bazie danych
+\l - lista baz danych
+SQL (np. select * from table;)
+\q - wyjście 
