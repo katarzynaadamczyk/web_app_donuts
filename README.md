@@ -12,5 +12,6 @@ set FLASK_APP=project/__init__.py
 set FLASK_RUN_PORT=5001
 pip install flask
 python .\services\web\manage.py run
-
+ctrl+c
+deactivate
 
