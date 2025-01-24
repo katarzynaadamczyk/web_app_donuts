@@ -20,7 +20,7 @@ def hello():
 
 # setting route /some_route_1
 @main.route("/some_route_1", methods=["GET"]) 
-def some_route_1(value):
+def some_route_1():
     '''
     return JSON for some_route_1
     '''
@@ -29,7 +29,7 @@ def some_route_1(value):
 
 # setting route /some_route_2
 @main.route("/some_route_2", methods=["GET"]) 
-def get_ip_tags_report(value):
+def some_route_2():
     '''
     return JSON for some_route_1
     '''

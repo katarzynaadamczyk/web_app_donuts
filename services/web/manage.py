@@ -1,8 +1,10 @@
 from flask.cli import FlaskGroup
 
-from app import app, db, User
+from app import create_app, db
+from app.models import User
 
 
+app = create_app()
 cli = FlaskGroup(app)
 
 
