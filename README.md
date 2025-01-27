@@ -19,8 +19,8 @@ to activate project in docker:
 cd katalog-repo
 docker compose up
 
-aby sprawdzić działanie bazy danych można przy uruchomionym serwerze zrobić:
-
+aby sprawdzić działanie bazy danych można przy uruchomionym serwerze zrobić tylko ważne aby być w katalogu projektu:
+cd KATALOG-REPO
 docker compose exec web python manage.py seed_db
 docker-compose exec db psql --username=hello_flask --dbname=hello_flask_dev
 \c - informacja do jakiej bazy jesteśmy podpięci
