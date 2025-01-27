@@ -21,3 +21,11 @@ def get_all_available_donuts():
     result = current_app.db.session.execute(stmt).all()
     return result
 
+
+def get_all_available_manufacturers():
+    '''
+    returns list of all available in db donuts
+    '''
+    stmt = select(Manufacturers.id, Manufacturers.name)
+    result = current_app.db.session.execute(stmt).all()
+    return result

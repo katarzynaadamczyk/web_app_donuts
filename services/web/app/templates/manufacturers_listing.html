@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        td {
+            white-space: normal; /* Zachowuje formatowanie znaków */
+            word-wrap: break-word; /* Łamie długie słowa */
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nazwa</th>
+                <th>Waga porcji [g]</th>
+                <th>Kcal / porcję </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in lst %}
+            <tr>
+                {% for key in ['id', 'name'] %}
+                <td> {{ m[key] }} </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

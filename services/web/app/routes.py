@@ -4,7 +4,7 @@ routes definitions
 
 from flask import Blueprint, current_app, jsonify, render_template
 from markupsafe import Markup
-from .utils import get_all_available_donuts
+from .utils import get_all_available_donuts, get_all_available_manufacturers
 
 # keep application blueprint
 main = Blueprint("main", __name__)
@@ -19,14 +19,22 @@ def hello():
     return jsonify('hello world')
 
 
-# setting route /some_route_1
-@main.route("/listing", methods=["GET"]) 
+# setting route /donuts_listing
+@main.route("/donunts_listing", methods=["GET"]) 
 def some_route_1():
     '''
     return HTML listing available donuts
     '''
     return render_template('donuts_listing.html', donuts=get_all_available_donuts())
 
+
+# setting route /manufacturers_listing
+@main.route("/donunts_listing", methods=["GET"]) 
+def some_route_1():
+    '''
+    return HTML listing available donuts
+    '''
+    return render_template('manufacturers_listing.html', lst=get_all_available_manufacturers())
 
 # setting route /some_route_2
 @main.route("/some_route_2", methods=["GET"]) 
