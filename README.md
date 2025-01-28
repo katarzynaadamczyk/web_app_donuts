@@ -3,6 +3,26 @@ Web app with dynamic programming algorithm and database. Under development.
 
 Using docker, Flask, postgreSQL. 
 
+App to get data from popular polish bakeries about donuts, then calculate for coming Fat Thursday how many of them a man can eat to maximize calories.
+
+For now only works adding bakeries to database (endpoint /manufacturers_listing).
+
+App is working on http:/localhost:5001/
+
+To do:
+- adding donuts to db 
+- testing db
+- adding user links to db 
+- testing
+- dp algorithm with showing results (infinite number of donuts available)
+- html with choosing algorithm
+- additional algorithms (for exaple only certain number of donuts are available)
+- more tests
+- add users (authorization and so on)
+- adding data about user tests
+- final tests
+
+
 
 
 To work in venv:
@@ -19,7 +39,7 @@ to activate project in docker:
 cd katalog-repo
 docker compose up
 
-Potem działa na aplikacja działa na http:/localhost:5001/
+App is working on http:/localhost:5001/
 
 aby sprawdzić działanie bazy danych można przy uruchomionym serwerze zrobić tylko ważne aby być w katalogu projektu:
 cd KATALOG-REPO

@@ -70,7 +70,8 @@ def write_to_db_one_manufacturers_donuts(item):
     else:
         donuts_links += get_all_donut_pages_from_given_page(item[LINK])
     if donuts_links and not donuts_links[0].startswith('https://'):
-        add = item[LINK][0:item[LINK].find('/', 8) + 1]
+        add_one = 1 if not donuts_links[0].startswith('/') else 0
+        add = item[LINK][0:item[LINK].find('/', 8) + add_one]
         donuts_links = [add + link for link in donuts_links]
     print(donuts_links)
     return donuts_links
@@ -117,6 +118,7 @@ def add_manufacturer(name):
             )
         current_app.db.session.add(new_item)
         current_app.db.session.commit()
+        print('added', name)
         return True
     return False
     
