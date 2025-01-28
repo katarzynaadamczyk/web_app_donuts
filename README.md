@@ -1,9 +1,34 @@
 # web_app_donuts
+Idea from task from flynerd.pl : 
+https://www.flynerd.pl/2019/02/tlusty-python-z-paczkami-i-algorytmami.html
+
+Data from given web pages are used only in learning process, not for commercial use.
+
 Web app with dynamic programming algorithm and database. Under development.
 
 Using docker, Flask, postgreSQL. 
 
-Under development.
+App to get data from popular polish bakeries about donuts, then calculate for coming Fat Thursday how many of them a man can eat to maximize calories.
+
+For now only works adding bakeries to database (endpoint /manufacturers_listing).
+
+App is working on http:/localhost:5001/
+
+To do:
+- adding donuts to db 
+- testing db
+- adding user links to db 
+- testing
+- dp algorithm with showing results (infinite number of donuts available)
+- html with choosing algorithm
+- additional algorithms (for exaple only certain number of donuts are available)
+- more tests
+- add users (authorization and so on)
+- adding data about user tests
+- final tests
+
+
+
 
 To work in venv:
 python -m venv env
@@ -19,8 +44,10 @@ to activate project in docker:
 cd katalog-repo
 docker compose up
 
-aby sprawdzić działanie bazy danych można przy uruchomionym serwerze zrobić:
+App is working on http:/localhost:5001/
 
+aby sprawdzić działanie bazy danych można przy uruchomionym serwerze zrobić tylko ważne aby być w katalogu projektu:
+cd KATALOG-REPO
 docker compose exec web python manage.py seed_db
 docker-compose exec db psql --username=hello_flask --dbname=hello_flask_dev
 \c - informacja do jakiej bazy jesteśmy podpięci
