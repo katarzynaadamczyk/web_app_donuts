@@ -4,7 +4,7 @@ routes definitions
 
 from flask import Blueprint, current_app, jsonify, render_template
 from markupsafe import Markup
-from .utils import *
+from .utils import get_all_available_donuts, get_all_available_manufacturers, load_data_from_json
 
 # keep application blueprint
 main = Blueprint("main", __name__)
@@ -43,5 +43,5 @@ def some_route_2():
     '''
     return JSON for rest
     '''
-    return jsonify(get_all_one_manufacturer_donuts())
+    return jsonify(json='hello')
 

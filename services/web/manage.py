@@ -2,6 +2,7 @@ from flask.cli import FlaskGroup
 
 from app import create_app, db
 from app.models import Donuts, Manufacturers
+from app.utils import load_data_from_json
 
 
 app = create_app()
@@ -13,6 +14,12 @@ def create_db():
     app.db.drop_all()
     app.db.create_all()
     app.db.session.commit()
+
+
+@cli.command("add_json_to_db")
+def add_json_to_db():
+    load_data_from_json("./database.json")
+    db.session.commit()
 
 
 @cli.command("putka")

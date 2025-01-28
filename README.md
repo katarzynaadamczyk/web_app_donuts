@@ -3,7 +3,7 @@ Web app with dynamic programming algorithm and database. Under development.
 
 Using docker, Flask, postgreSQL. 
 
-Under development.
+
 
 To work in venv:
 python -m venv env
@@ -18,6 +18,8 @@ deactivate
 to activate project in docker:
 cd katalog-repo
 docker compose up
+
+Potem działa na aplikacja działa na http:/localhost:5001/
 
 aby sprawdzić działanie bazy danych można przy uruchomionym serwerze zrobić tylko ważne aby być w katalogu projektu:
 cd KATALOG-REPO
