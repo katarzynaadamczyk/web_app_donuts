@@ -2,6 +2,8 @@
 Idea from task from flynerd.pl : 
 https://www.flynerd.pl/2019/02/tlusty-python-z-paczkami-i-algorytmami.html
 
+Data from given web pages are used only in learning process, not for commercial use.
+
 Web app with dynamic programming algorithm and database. Under development.
 
 Using docker, Flask, postgreSQL. 
