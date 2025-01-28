@@ -1,4 +1,7 @@
 # web_app_donuts
+Idea from task from flynerd.pl : 
+https://www.flynerd.pl/2019/02/tlusty-python-z-paczkami-i-algorytmami.html
+
 Web app with dynamic programming algorithm and database. Under development.
 
 Using docker, Flask, postgreSQL. 
