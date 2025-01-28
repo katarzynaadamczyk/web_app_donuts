@@ -74,6 +74,7 @@ def write_to_db_one_manufacturers_donuts(item):
         add = item[LINK][0:item[LINK].find('/', 8) + add_one]
         donuts_links = [add + link for link in donuts_links]
     print(donuts_links)
+    add_data_to_db_for_given_links(donuts_links)
     return donuts_links
 
 
@@ -83,7 +84,7 @@ def get_all_donut_pages_with_n_parameter(item):
     '''
     donut_links = []
     for i in range(1, item[N]):
-        donut_links += get_all_donut_pages_from_given_page(item[LINK] + str(i) + '//')
+        donut_links += get_all_donut_pages_from_given_page(item[LINK] + str(i) + '/')
     return donut_links
 
 
@@ -100,11 +101,19 @@ def add_data_to_db_for_given_links(links):
     '''
     get all links to subpages with data about donuts 
     '''
+    for link in links:
+        r = requests.get(link)
+        soup = BeautifulSoup(r.text, features="html.parser")
+        names = soup.find_all(string=lambda text: 'pączek' in text.lower())
+        for name in names:
+            print(name, name.parent)
+        break
     # TODO
     pass
   #  r = requests.get(html_link)
    # soup = BeautifulSoup(r.text, features="html.parser")
   #  return [a['href'] for a in soup.find_all('a') if 'paczek' in a['href']]
+
 
 def add_manufacturer(name):
     '''
