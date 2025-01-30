@@ -108,8 +108,21 @@ def add_data_to_db_for_given_links(links):
         names = soup.find_all(class_="active")
         #names = soup.find_all('title') # (string=lambda text: 'active' in text.lower())
         names = [name for name in names if "pączek" in name.text.lower()]
-        for name in names:
-            print('name:', name.text.strip())
+        if len(names) == 1:
+            name = names[0]
+            print('name:', name)
+            if ' g' in name:
+                weight = int(re.findall(r'/d+', name)[0])
+                print('weight:', weight)
+        else:
+            print('not one name')
+            for name in names:
+                print('name:', name.text.strip())
+        print(find_kcal(soup))
+    #    kcal_index = kcal_numbers.find(' kcal')
+     #   kcal = float(kcal_numbers[:kcal_index-1].rfind(' '))
+        
+
 
      #   elementy = soup.find_all(text=re.compile(r"\d+")) # szukanie liczb
      #   for element in elementy:
@@ -135,6 +148,35 @@ def add_manufacturer(name):
         current_app.db.session.add(new_item)
         current_app.db.session.commit()
         print('added', name)
-        return True
+        return current_app.db.session.execute(stmt).all()[0]
+    return False
+
+
+def add_donut(manufacturer_id, name, kcal, weight):
+    '''
+    add manufacturer to db
+    '''
+    stmt = select(Donuts.id).where(Donuts.name == name).where(Donuts.kcal == kcal)\
+           .where(Donuts.manufacturer_id == manufacturer_id).where(Donuts.weight == weight)
+    result = current_app.db.session.execute(stmt).all()
+    if len(result) == 0:
+        new_item = Donuts(
+                name=name,
+                manufacturer_id=manufacturer_id,
+                kcal=kcal,
+                weight=weight
+            )
+        current_app.db.session.add(new_item)
+        current_app.db.session.commit()
+        print('added', name)
+        return current_app.db.session.execute(stmt).all()[0]
     return False
     
+
+def find_kcal(soup):
+    liczby = []
+    for element in soup.find_all(text=True):
+        for x in re.findall(r'\d+ kcal', element.text):
+            liczby.append(element)
+
+    return liczby
