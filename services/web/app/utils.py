@@ -104,9 +104,11 @@ def add_data_to_db_for_given_links(links):
     for link in links:
         r = requests.get(link)
         soup = BeautifulSoup(r.text, features="html.parser")
-        names = soup.find_all(string=lambda text: 'pączek' in text.lower())
+        names = soup.find_all(class_="active")
+        #names = soup.find_all('title') # (string=lambda text: 'active' in text.lower())
+        names = [name for name in names if "pączek" in name.text.lower()]
         for name in names:
-            print(name, name.parent)
+            print('name:', name.text)
         break
     # TODO
     pass
