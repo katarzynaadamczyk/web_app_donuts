@@ -13,6 +13,7 @@ from flask import abort, current_app
 import ijson
 import requests
 from sqlalchemy import select
+import re
 from app.models import *
 
 # define json dict keys in case they change over time
@@ -108,8 +109,12 @@ def add_data_to_db_for_given_links(links):
         #names = soup.find_all('title') # (string=lambda text: 'active' in text.lower())
         names = [name for name in names if "pączek" in name.text.lower()]
         for name in names:
-            print('name:', name.text)
-        break
+            print('name:', name.text.strip())
+
+     #   elementy = soup.find_all(text=re.compile(r"\d+")) # szukanie liczb
+     #   for element in elementy:
+      #      print(element.strip())
+      #  break
     # TODO
     pass
   #  r = requests.get(html_link)
