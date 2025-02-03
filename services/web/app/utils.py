@@ -9,6 +9,7 @@ given ip_address in endpoint
 
 '''
 from bs4 import BeautifulSoup
+from contextlib import contextmanager
 from flask import abort, current_app
 import ijson
 import requests
@@ -93,9 +94,19 @@ def get_all_donut_pages_from_given_page(html_link):
     '''
     get all links to subpages with data about donuts 
     '''
-    r = requests.get(html_link)
+    with get_soup(html_link) as soup:
+        return [a['href'] for a in soup.find_all('a') if 'paczek' in a['href']]
+
+
+@contextmanager
+def get_soup(link):
+    '''
+    context manager returning BeautifulSoup of of given link
+    '''
+    r = requests.get(link)
     soup = BeautifulSoup(r.text, features="html.parser")
-    return [a['href'] for a in soup.find_all('a') if 'paczek' in a['href']]
+    yield soup
+
 
 
 def add_data_to_db_for_given_links(links):
@@ -103,22 +114,22 @@ def add_data_to_db_for_given_links(links):
     get all links to subpages with data about donuts 
     '''
     for link in links:
-        r = requests.get(link)
-        soup = BeautifulSoup(r.text, features="html.parser")
-        names = soup.find_all(class_="active")
-        #names = soup.find_all('title') # (string=lambda text: 'active' in text.lower())
-        names = [name for name in names if "pączek" in name.text.lower()]
-        if len(names) == 1:
-            name = names[0]
-            print('name:', name)
-            if ' g' in name:
-                weight = int(re.findall(r'/d+', name)[0])
-                print('weight:', weight)
-        else:
-            print('not one name')
-            for name in names:
-                print('name:', name.text.strip())
-        print(find_kcal(soup))
+        with get_soup(link) as soup:
+            names = soup.find_all(class_="active")
+            #names = soup.find_all('title') # (string=lambda text: 'active' in text.lower())
+            names = [name for name in names if "pączek" in name.text.lower()]
+            if len(names) == 1:
+                name = names[0].text
+                print('name:', name)
+                print(re.findall(r'\d+ g', name))
+                if ' g' in name:
+                    weight = int(re.findall(r'\d+', name)[0])
+                    print('weight:', weight)
+            else:
+                print('not one name')
+                for name in names:
+                    print('name:', name.text.strip())
+            print(find_kcal(soup))
     #    kcal_index = kcal_numbers.find(' kcal')
      #   kcal = float(kcal_numbers[:kcal_index-1].rfind(' '))
         
