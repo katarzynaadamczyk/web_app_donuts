@@ -25,7 +25,8 @@ def donuts_listing():
     '''
     return HTML listing available donuts
     '''
-    return render_template('donuts_listing.html', donuts=get_all_available_donuts())
+    donuts=get_all_available_donuts()
+    return render_template('donuts_listing.html', donuts=donuts)
 
 
 # setting route /manufacturers_listing
