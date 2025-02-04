@@ -92,7 +92,7 @@ class Scraper:
             with self.get_soup(link) as soup:
                 name = self.get_name(soup)
                 weight = self.get_weight(soup, name)
-                kcal = self.get_kcal(soup)
+                kcal = self.get_kcal(soup, name)
                 if type(kcal) == type(weight) == type(1):
                     kcal = kcal * weight / 100
                 print('kcal:', kcal)
@@ -120,7 +120,11 @@ class Scraper:
             name = names[0].text.strip()
             print('name:', name)
             return name
-        # TODO
+        names = [x.text for x in soup.select('h1')]
+        if len(names) == 1:
+            name = names[0].strip()
+            print('name:', name)
+            return name
         return None
 
 
@@ -136,12 +140,23 @@ class Scraper:
             weight: Optional(int)
         '''
         if name is not None:
-            possible_weights = re.findall(r'\d+ g', name)
+            possible_weights = re.findall(r'\d+\s*g', name)
             if len(possible_weights) == 1:
                 weight = int(re.findall(r'\d+', possible_weights[0])[0])
                 print('weight:', weight)
                 return weight
-        # TODO
+        elems = [elem for elem in soup.find_all(class_='col-sm-4') \
+                    if elem.find_all(text=re.compile(r"\s*" + re.escape(name) + r"\s*"))]
+        if elems:
+            weights = elems[0].find_all(text=re.compile(r'\d+\s*g'))[0]
+            weight = int(re.findall(r'\d+', weights)[0])
+            print('weight:', weight)
+            return weight
+        weights = soup.find_all(text=re.compile(r'\d+,\d+\s*kg'))
+        if weights:
+            weight = int(float(re.findall(r'\d+,\d+', weights[0])[0].replace(',', '.')) * 1000)
+            print('weight:', weight)
+            return weight
         return None
 
 
@@ -191,7 +206,7 @@ class Scraper:
         return result
     
 
-    def get_kcal(self, soup):
+    def get_kcal(self, soup, name):
         '''
         function to find all texts where kcal is in it
         returns kcal per 100 g if len of all kcal appearances is > 0 and < 4
@@ -199,11 +214,13 @@ class Scraper:
         returns list of all appearances
         '''
         kcals = []
-        for element in soup.find_all(text=True):
-            for x in re.findall(r'\d+ kcal', element.text):
-                kcals.append(element)
+        for element in soup.find_all(text=re.compile(r'\d+ kcal')):
+            kcals.append(element)
         if  0 < len(kcals) < 4:
             value_per_100_g = re.findall(r'\d+ kcal', kcals[0])[0]
-            return int(value_per_100_g[:value_per_100_g.find(' ')])
+        else:
+            elem = [elem for elem in soup.find_all(class_='col-sm-4') \
+                    if elem.find_all(text=re.compile(r"\s*" + re.escape(name) + r"\s*"))][0]
+            value_per_100_g = elem.find_all(text=re.compile(r'\d+ kcal'))[0]
+        return int(value_per_100_g[:value_per_100_g.find(' ')])
 
-        return None

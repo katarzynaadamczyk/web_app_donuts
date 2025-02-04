@@ -15,8 +15,6 @@ from app.models import *
 from app.utils_scraper import Scraper
 
 
-
-
 def get_all_available_donuts():
     '''
     returns list of all available in db donuts
