@@ -8,17 +8,11 @@ get_correct_ip_address - function returning correct ip_address
 given ip_address in endpoint
 
 '''
-from bs4 import BeautifulSoup
 from flask import abort, current_app
 import ijson
-import requests
 from sqlalchemy import select
 from app.models import *
-
-# define json dict keys in case they change over time
-LINK = 'html'
-NAME = 'name'
-N = 'n'
+from app.utils_scraper import Scraper
 
 
 def get_all_available_donuts():
@@ -47,78 +41,13 @@ def load_data_from_json(filename):
     of donuts (pastries)
     add all not existing to the database
     '''
+    scraper = Scraper(current_app.db)
     try:
         with open(filename, "rb") as file:
             for item in ijson.items(file, "item"):
-                write_to_db_one_manufacturers_donuts(item)
+                scraper.write_to_db_one_manufacturers_donuts(item)
     except FileNotFoundError:
         print(f"File {filename} not found.")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-
-
-def write_to_db_one_manufacturers_donuts(item):
-    '''
-    adds to database all donuts from given webpage to Donuts Table
-    and their manufacturer (item[NAME]) to Manufacturers Table
-    '''
-    add_manufacturer(item[NAME])
-    donuts_links = []
-    if N in item.keys():
-        donuts_links += get_all_donut_pages_with_n_parameter(item)
-    else:
-        donuts_links += get_all_donut_pages_from_given_page(item[LINK])
-    if donuts_links and not donuts_links[0].startswith('https://'):
-        add_one = 1 if not donuts_links[0].startswith('/') else 0
-        add = item[LINK][0:item[LINK].find('/', 8) + add_one]
-        donuts_links = [add + link for link in donuts_links]
-    print(donuts_links)
-    return donuts_links
-
-
-def get_all_donut_pages_with_n_parameter(item):
-    '''
-    get all links to subpages with data about donuts 
-    '''
-    donut_links = []
-    for i in range(1, item[N]):
-        donut_links += get_all_donut_pages_from_given_page(item[LINK] + str(i) + '//')
-    return donut_links
-
-
-def get_all_donut_pages_from_given_page(html_link):
-    '''
-    get all links to subpages with data about donuts 
-    '''
-    r = requests.get(html_link)
-    soup = BeautifulSoup(r.text, features="html.parser")
-    return [a['href'] for a in soup.find_all('a') if 'paczek' in a['href']]
-
-
-def add_data_to_db_for_given_links(links):
-    '''
-    get all links to subpages with data about donuts 
-    '''
-    # TODO
-    pass
-  #  r = requests.get(html_link)
-   # soup = BeautifulSoup(r.text, features="html.parser")
-  #  return [a['href'] for a in soup.find_all('a') if 'paczek' in a['href']]
-
-def add_manufacturer(name):
-    '''
-    add manufacturer to db
-    '''
-    stmt = select(Manufacturers.id).where(Manufacturers.name == name)
-    result = current_app.db.session.execute(stmt).all()
-    if len(result) == 0:
-        new_item = Manufacturers(
-                name=name
-            )
-        current_app.db.session.add(new_item)
-        current_app.db.session.commit()
-        print('added', name)
-        return True
-    return False
-    

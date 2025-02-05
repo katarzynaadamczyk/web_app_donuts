@@ -34,10 +34,10 @@
             </tr>
         </thead>
         <tbody>
-            {% for donut in lst %}
+            {% for donut in donuts %}
             <tr>
-                {% for key in ['id', 'name', 'weight', 'kcal'] %}
-                <td> {{ donut[key] }} </td>
+                {% for name in donut %}
+                <td> {{ name }} </td>
                 {% endfor %}
             </tr>
             {% endfor %}
