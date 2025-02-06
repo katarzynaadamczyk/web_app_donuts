@@ -41,3 +41,4 @@ def runner(app_with_db):
     # Tworzymy CLI runner do testowania komend CLI
     return app_with_db.test_cli_runner()
 
+
