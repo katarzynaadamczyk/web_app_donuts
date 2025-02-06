@@ -55,3 +55,22 @@ docker-compose exec db psql --username=hello_flask --dbname=hello_flask_dev
 \l - lista baz danych
 SQL (np. select * from table;)
 \q - wyjście 
+
+
+Aby uruchomić testy w środowisku wirtualnym należy wpisać poniższe komendy w CMD:
+
+cd KATALOG-REPO
+
+cd services
+
+cd web
+
+python -m venv venv
+
+.\venv\Scripts\activate.bat
+
+pip3 install -r tests/requirements.txt
+
+pytest
+
+deactivate

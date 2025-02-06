@@ -226,13 +226,13 @@ class Scraper:
                 print('weight:', weight)
                 return weight
         elems = [elem for elem in soup.find_all(class_='col-sm-4') \
-                    if elem.find_all(text=re.compile(r"\s*" + re.escape(name) + r"\s*"))]
+                    if elem.find_all(string=re.compile(r"\s*" + re.escape(name) + r"\s*"))]
         if elems:
-            weights = elems[0].find_all(text=re.compile(r'\d+\s*g'))[0]
+            weights = elems[0].find_all(string=re.compile(r'\d+\s*g'))[0]
             weight = int(re.findall(r'\d+', weights)[0])
             print('weight:', weight)
             return weight
-        weights = soup.find_all(text=re.compile(r'\d+,\d+\s*kg'))
+        weights = soup.find_all(string=re.compile(r'\d+,\d+\s*kg'))
         if weights:
             weight = int(float(re.findall(r'\d+,\d+', weights[0])[0].replace(',', '.')) * 1000)
             print('weight:', weight)
@@ -312,13 +312,13 @@ class Scraper:
             float: kcals per 100 g
         '''
         kcals = []
-        for element in soup.find_all(text=re.compile(r'\d+ kcal')):
+        for element in soup.find_all(string=re.compile(r'\d+ kcal')):
             kcals.append(element)
         if  0 < len(kcals) < 4:
             value_per_100_g = re.findall(r'\d+ kcal', kcals[0])[0]
         else:
             elem = [elem for elem in soup.find_all(class_='col-sm-4') \
-                    if elem.find_all(text=re.compile(r"\s*" + re.escape(name) + r"\s*"))][0]
-            value_per_100_g = elem.find_all(text=re.compile(r'\d+ kcal'))[0]
+                    if elem.find_all(string=re.compile(r"\s*" + re.escape(name) + r"\s*"))][0]
+            value_per_100_g = elem.find_all(string=re.compile(r'\d+ kcal'))[0]
         return int(value_per_100_g[:value_per_100_g.find(' ')])
 
