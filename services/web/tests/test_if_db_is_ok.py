@@ -2,6 +2,7 @@
 test if correct data is in database
 if so scraper works correctly
 '''
+
 from app.utils import get_all_available_donuts, get_all_available_manufacturers
 from sqlalchemy import select, and_
 from app.models import *
