@@ -14,7 +14,9 @@ Web application in Flask integrated with postgreSQL database working in Docker c
 
 ## General info
 
-Actually (6/2/2025) works adding bakeries and donuts to the database by reading data from web pages listed in database.json. Two endpoints also work:
+Actually (6/2/2025) works adding bakeries and donuts to the database by reading data from web pages listed in database.json. Algorithms also work but are not implemented in any of endpoints. 
+
+Two endpoints also work:
 
 - endpoint /donuts_listing lists all donuts on web page
 - endpoint /manufacturers_listing lists all manufacturers on web page
