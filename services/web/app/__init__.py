@@ -4,6 +4,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 from werkzeug.exceptions import HTTPException, NotFound
+from .utils_solver import Solver
 
 db = SQLAlchemy()
 
@@ -17,6 +18,7 @@ def create_app():
     app.config.from_object("app.config.Config")
     db.init_app(app)
     app.db = db
+    app.solver = Solver()
 
     # register routes blueprint
     from .routes import main

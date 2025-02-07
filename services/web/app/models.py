@@ -9,7 +9,7 @@ class Donuts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
     kcal = db.Column(db.Float(5), nullable=False)
-    weight = db.Column(db.Float(5), nullable=False)
+    weight = db.Column(db.Integer, nullable=False)
     manufacturer_id = db.Column(db.Integer, nullable=False)
 
     def __init__(self, name, kcal, weight, manufacturer_id):
