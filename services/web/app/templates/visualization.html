@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wizualizacja Algorytmu Plecakowego</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Wizualizacja Pączków</h1>
+    <div id="total_kcal">TOTAL: {{kcal}} kcal</div>
+    <div id="plot"></div>
+    <script>
+        var graphJSON = {{ graphJSON | safe }};
+        Plotly.newPlot("plot", graphJSON);
+    </script>
+</body>
+</html>
