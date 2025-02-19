@@ -3,9 +3,11 @@ routes definitions
 '''
 
 from flask import Blueprint, current_app, jsonify, render_template
+import numpy as np
 from sqlalchemy import select
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import plotly.utils
 import plotly.io as pio
 import json
@@ -94,18 +96,37 @@ def solve_all_donuts_infinite_2(value):
     stmt = select(Donuts.id, Donuts.weight, Donuts.kcal)
     with current_app.app_context():
         results = current_app.db.session.execute(stmt).all()
-        result = current_app.solver.pick_me_donuts_0_1(results, value)
+        result = current_app.solver.pick_me_donuts_unlimited(results, value)
         resulting_donuts = current_app.db.session.query(Donuts).filter(Donuts.id.in_(result[1].keys())).all()
-        df = pd.DataFrame({'Donuts': [d.name for d in resulting_donuts],
-                          'Quantity': [int(result[1][d.id]) for d in resulting_donuts]})
+        donuts = [d.name for d in resulting_donuts]
+        values = list(result[1].values())
+    
     print(result)
-    # Tworzymy wykres
-    print(df)
-    df['Quantity'] = df['Quantity'].astype(int)
-    fig = px.bar(df, x='Donuts', y='Quantity', title="Quantity of chosen donuts")
+    
+    fig = go.Figure(data=[go.Bar(x=donuts , y=values)])
+    fig.update_yaxes(type='linear')
+
     print(fig)
+    print(fig.data[0]['y'])
     # Konwersja wykresu do JSON
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-    return render_template("visualization.html", graphJSON=graphJSON)
+    return render_template("visualization.html", graphJSON=graphJSON, kcal=round(result[0], 2))
+
+# setting route /test_2
+@main.route("/test_2", methods=["GET"]) 
+def test_2():
+    '''
+    return JSON for rest
+    '''
+    # pio.renderers.default = "browser"
+    items = ['Paczek z adwokatem', 'Paczek']
+    values = [2, 1]
+
+    fig = go.Figure(data=[go.Bar(x=items, y=values)])
+    fig.update_yaxes(type='linear')
+    print(fig)
+    print(fig.data[0]['y'])
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return render_template("visualization.html", graphJSON=graphJSON, kcal=0)
 
