@@ -2,7 +2,7 @@
 routes definitions 
 '''
 
-from flask import Blueprint, current_app, jsonify, render_template
+from flask import Blueprint, current_app, jsonify, render_template, request
 import numpy as np
 from sqlalchemy import select
 import pandas as pd
@@ -119,14 +119,36 @@ def test_2():
     '''
     return JSON for rest
     '''
-    # pio.renderers.default = "browser"
-    items = ['Paczek z adwokatem', 'Paczek']
-    values = [2, 1]
+    return render_template("visualization2.html")
 
-    fig = go.Figure(data=[go.Bar(x=items, y=values)])
-    fig.update_yaxes(type='linear')
-    print(fig)
-    print(fig.data[0]['y'])
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return render_template("visualization.html", graphJSON=graphJSON, kcal=0)
+
+def generate_chart(toggle, value):
+    """Tworzy wykres w zależności od parametrów."""
+
+    stmt = select(Donuts.id, Donuts.weight, Donuts.kcal)
+    with current_app.app_context():
+        results = current_app.db.session.execute(stmt).all()
+        if toggle:
+            result = current_app.solver.pick_me_donuts_unlimited(results, value)
+        else:
+            result = current_app.solver.pick_me_donuts_0_1(results, value)
+        resulting_donuts = current_app.db.session.query(Donuts).filter(Donuts.id.in_(result[1].keys())).all()
+        donuts = [d.name for d in resulting_donuts]
+        values = list(result[1].values())
+
+    fig = go.Figure(data=[go.Bar(x=donuts, y=values, name="Ilość")])
+    fig.update_layout(title="Ilość wybranych pączków", xaxis_title="Rodzaj", yaxis_title="Ilość")
+
+    return fig.to_dict(), round(result[0])
+
+
+@main.route("/update_chart", methods=["POST"])
+def update_chart():
+    data = request.get_json()
+    toggle = data.get("toggle", False)
+    slider_value = int(data.get("slider", 50))
+
+    new_chart, kcal = generate_chart(toggle, slider_value)
+
+    return jsonify(data=new_chart, dynamic_value=kcal)
 

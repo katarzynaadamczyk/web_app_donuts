@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wizualizacja Pączków</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 300px;
+        }
+        .output {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Wizualizacja Pączków</h2>
+
+    <!-- Sekcja kontrolek -->
+    <div class="controls">
+        <!-- Przełącznik -->
+        <label>
+            <input type="checkbox" id="toggleSwitch"> Wybór algorytmu (on - algorytm z nielimitowanymi pączkami, off - każdego rodzaju max 1 sztuka)
+        </label>
+        
+        <!-- Suwak -->
+        <label>
+            Ile gram pączków chcesz zjeść? 
+            <input type="range" id="slider" min="60" max="500" value="150">
+            <span id="sliderValue">150</span>
+        </label>
+    </div>
+
+    <!-- Miejsce na dynamiczną wartość -->
+    <div class="output">
+        Aktualna wartość kalorii do zjedzenia: <span id="dynamicValue">---</span>
+    </div>
+
+    <!-- Wykres -->
+    <div id="chart"></div>
+
+    <!-- Wykres -->
+    <div id="chart"></div>
+
+    <script>
+        document.getElementById("slider").oninput = function() {
+            document.getElementById("sliderValue").innerText = this.value;
+            updateChart();
+        };
+
+        document.getElementById("toggleSwitch").onchange = function() {
+            updateChart();
+        };
+
+        function updateChart() {
+            let toggle = document.getElementById("toggleSwitch").checked;
+            let sliderValue = document.getElementById("slider").value;
+
+            $.ajax({
+                url: "/update_chart",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ toggle: toggle, slider: sliderValue }),
+                success: function(response) {
+                    Plotly.newPlot("chart", response.data);
+                    document.getElementById("dynamicValue").innerText = response.dynamic_value;
+                }
+            });
+        }
+
+        // Wczytanie wykresu na start
+        updateChart();
+    </script>
+</body>
+</html>
