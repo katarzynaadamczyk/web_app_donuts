@@ -14,10 +14,13 @@ Web application in Flask integrated with postgreSQL database working in Docker c
 
 ## General info
 
-Actually (6/2/2025) works adding bakeries and donuts to the database by reading data from web pages listed in database.json. Two endpoints also work:
+Actually (22/2/2025) works adding bakeries and donuts to the database by reading data from web pages listed in database.json. Algorithms also work and are implemented in an endpoint. 
+
+Working endpoint:
 
 - endpoint /donuts_listing lists all donuts on web page
 - endpoint /manufacturers_listing lists all manufacturers on web page
+- endpoint /donuts_to_eat is an interactive web page to check which are best donuts to eat given how many g an user wishes to eat and user chooses algorithm.
 
 Idea from task from flynerd.pl: 
 
@@ -34,6 +37,7 @@ https://www.flynerd.pl/2019/02/tlusty-python-z-paczkami-i-algorytmami.html
 * bs4 - BeautifulSoup - version 0.0.2
 * gunicorn - version 23.0.0
 * requests - version 2.32.3
+* plotly - version 6.0.0
 
 
 ## Setup
@@ -101,10 +105,7 @@ Under development.
 
 To do:
 
-- dp algorithm with showing results (infinite number of donuts available)
-- testing
-- html with choosing algorithm
-- additional algorithms (for example only certain number of donuts are available)
+- users choosing which donuts he wants to consider
 - more tests
 - add users (authorization and so on)
 - adding data about user's checking donuts to buy

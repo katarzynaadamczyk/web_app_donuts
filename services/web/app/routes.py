@@ -2,9 +2,12 @@
 routes definitions 
 '''
 
-from flask import Blueprint, current_app, jsonify, render_template
-from markupsafe import Markup
-from .utils import get_all_available_donuts, get_all_available_manufacturers, load_data_from_json
+from flask import Blueprint, current_app, jsonify, render_template, request
+import numpy as np
+from sqlalchemy import select
+from .models import Donuts, Manufacturers
+from .utils import generate_chart, get_all_available_donuts, get_all_available_manufacturers
+
 
 # keep application blueprint
 main = Blueprint("main", __name__)
@@ -38,11 +41,22 @@ def manufacturers_listing():
     return render_template('manufacturers_listing.html', lst=get_all_available_manufacturers())
 
 
-# setting route /some_route_2
-@main.route("/test", methods=["GET"]) 
-def some_route_2():
+# setting route /test_2
+@main.route("/donuts_to_eat", methods=["GET"]) 
+def donuts_to_eat():
     '''
     return JSON for rest
     '''
-    return jsonify(json='hello')
+    return render_template("visualization.html")
+
+
+@main.route("/update_chart", methods=["POST"])
+def update_chart():
+    data = request.get_json()
+    toggle = data.get("toggle", False)
+    slider_value = int(data.get("slider", 50))
+
+    new_chart, kcal = generate_chart(toggle, slider_value)
+
+    return jsonify(data=new_chart, dynamic_value=kcal)
 
