@@ -47,7 +47,7 @@ def donuts_to_eat():
     '''
     return JSON for rest
     '''
-    return render_template("visualization2.html")
+    return render_template("visualization.html")
 
 
 @main.route("/update_chart", methods=["POST"])

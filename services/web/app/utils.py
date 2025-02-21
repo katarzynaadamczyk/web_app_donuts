@@ -76,12 +76,17 @@ def generate_chart(toggle, value):
             result = current_app.solver.pick_me_donuts_unlimited(results, value)
         else:
             result = current_app.solver.pick_me_donuts_0_1(results, value)
-        resulting_donuts = current_app.db.session.query(Donuts).filter(Donuts.id.in_(result[1].keys())).all()
-        donuts = [d.name for d in resulting_donuts]
+        stmt = (
+                select(Donuts, Manufacturers)\
+                .join(Manufacturers, Donuts.manufacturer_id == Manufacturers.id)\
+                .where(Donuts.id.in_(result[1].keys()))\
+        )
+        resulting_donuts = current_app.db.session.execute(stmt).fetchall()
+        donuts = [d.name + ' - ' + m.name for d, m in resulting_donuts]
         values = list(result[1].values())
 
-    fig = go.Figure(data=[go.Bar(x=donuts, y=values, name="Ilość")])
-    fig.update_layout(title="Ilość wybranych pączków", xaxis_title="Rodzaj", yaxis_title="Ilość")
+    fig = go.Figure(data=[go.Bar(x=donuts, y=values, name="Quantity")])
+    fig.update_layout(title="Quantity of chosen donuts", xaxis_title="Donuts", yaxis_title="Quantity")
 
     return fig.to_dict(), round(result[0])
 
