@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wizualizacja Pączków</title>
+    <title>Donuts Visualization</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -25,18 +25,18 @@
     </style>
 </head>
 <body>
-    <h2>Wizualizacja Pączków</h2>
+    <h2>Donuts Visualization</h2>
 
-    <!-- Sekcja kontrolek -->
+    <!-- Controls section -->
     <div class="controls">
-        <!-- Przełącznik -->
+        <!-- Toggle -->
         <label>
-            <input type="checkbox" id="toggleSwitch"> Wybór algorytmu (on - algorytm z nielimitowanymi pączkami, off - każdego rodzaju max 1 sztuka)
+            <input type="checkbox" id="toggleSwitch"> Algorithm choice (on - algorithm with unlimited number of donuts, off - algorithm 0-1 donut)
         </label>
         
         <!-- Suwak -->
         <label>
-            Ile gram pączków chcesz zjeść? 
+            How many grams of donuts would you like to eat? 
             <input type="range" id="slider" min="60" max="500" value="150">
             <span id="sliderValue">150</span>
         </label>
@@ -44,7 +44,7 @@
 
     <!-- Miejsce na dynamiczną wartość -->
     <div class="output">
-        Aktualna wartość kalorii do zjedzenia: <span id="dynamicValue">---</span>
+        Total calories to eat: <span id="dynamicValue">---</span>
     </div>
 
     <!-- Wykres -->

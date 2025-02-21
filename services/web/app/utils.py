@@ -11,6 +11,10 @@ given ip_address in endpoint
 from flask import abort, current_app
 import ijson
 from sqlalchemy import select
+import plotly.graph_objects as go
+import plotly.utils
+import plotly.io as pio
+import json
 from app.models import *
 from app.utils_scraper import Scraper
 
@@ -50,4 +54,34 @@ def load_data_from_json(filename):
         print(f"File {filename} not found.")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+
+
+def generate_chart(toggle, value):
+    '''
+    Generates chart based on given parameters.
+
+    Args:
+        toggle: bool - True - unlimited algorithm
+                       False - 0_1 algorithm
+        value: int - how many g of donuts to eat
+    
+    Returns:
+        tuple(dict of fig, int - number of calories)
+    '''
+
+    stmt = select(Donuts.id, Donuts.weight, Donuts.kcal)
+    with current_app.app_context():
+        results = current_app.db.session.execute(stmt).all()
+        if toggle:
+            result = current_app.solver.pick_me_donuts_unlimited(results, value)
+        else:
+            result = current_app.solver.pick_me_donuts_0_1(results, value)
+        resulting_donuts = current_app.db.session.query(Donuts).filter(Donuts.id.in_(result[1].keys())).all()
+        donuts = [d.name for d in resulting_donuts]
+        values = list(result[1].values())
+
+    fig = go.Figure(data=[go.Bar(x=donuts, y=values, name="Ilość")])
+    fig.update_layout(title="Ilość wybranych pączków", xaxis_title="Rodzaj", yaxis_title="Ilość")
+
+    return fig.to_dict(), round(result[0])
 
