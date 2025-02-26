@@ -56,7 +56,7 @@ def load_data_from_json(filename):
         print(f"An unexpected error occurred: {e}")
 
 
-def generate_chart(toggle, value):
+def generate_chart(toggle, value, selected_donuts):
     '''
     Generates chart based on given parameters.
 
@@ -64,12 +64,12 @@ def generate_chart(toggle, value):
         toggle: bool - True - unlimited algorithm
                        False - 0_1 algorithm
         value: int - how many g of donuts to eat
+        selected_donuts: List[Tuple(int, str)] - list of Donuts an user would like to consider
     
     Returns:
         tuple(dict of fig, int - number of calories)
     '''
-
-    stmt = select(Donuts.id, Donuts.weight, Donuts.kcal)
+    stmt = select(Donuts.id, Donuts.weight, Donuts.kcal).where(Donuts.id.in_(selected_donuts))
     with current_app.app_context():
         results = current_app.db.session.execute(stmt).all()
         if toggle:
@@ -89,4 +89,18 @@ def generate_chart(toggle, value):
     fig.update_layout(title="Quantity of chosen donuts", xaxis_title="Donuts", yaxis_title="Quantity")
 
     return fig.to_dict(), round(result[0])
+
+
+def get_all_donuts_names():
+    '''
+    Function returning a list of tuples: Donut id and joined Donut name with its Manufacturer's name
+
+    Returns:
+        List[Tuple(int, str)]
+    '''
+    stmt = select(Donuts.id, Donuts.name, Manufacturers.name).join(Manufacturers, Donuts.manufacturer_id == Manufacturers.id)
+    with current_app.app_context():
+        result = current_app.db.session.execute(stmt).all()
+    print([(i, donut + ' - ' + manuf) for i, donut, manuf in result])
+    return [(i, donut + ' - ' + manuf) for i, donut, manuf in result]
 

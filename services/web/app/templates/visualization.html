@@ -34,12 +34,24 @@
             <input type="checkbox" id="toggleSwitch"> Algorithm choice (on - algorithm with unlimited number of donuts, off - algorithm 0-1 donut)
         </label>
         
-        <!-- Suwak -->
+        <!-- Slider -->
         <label>
             How many grams of donuts would you like to eat? 
             <input type="range" id="slider" min="60" max="500" value="150">
             <span id="sliderValue">150</span>
         </label>
+
+        
+        <!-- Slider -->
+        <label>
+            Which donuts would you like to consider?
+            <select id="dropdown" multiple>
+                {% for donut in donuts %}
+                    <option value="{{ donut[0] }}">{{ donut[1] }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
     </div>
 
     <!-- Miejsce na dynamiczną wartość -->
@@ -63,15 +75,20 @@
             updateChart();
         };
 
+        document.getElementById("dropdown").onchange = function() {
+            updateChart();
+        };
+
         function updateChart() {
             let toggle = document.getElementById("toggleSwitch").checked;
             let sliderValue = document.getElementById("slider").value;
+            let selectedDonuts = $("#dropdown").val();
 
             $.ajax({
                 url: "/update_chart",
                 type: "POST",
                 contentType: "application/json",
-                data: JSON.stringify({ toggle: toggle, slider: sliderValue }),
+                data: JSON.stringify({ toggle: toggle, slider: sliderValue, selected: selectedDonuts }),
                 success: function(response) {
                     Plotly.newPlot("chart", response.data);
                     document.getElementById("dynamicValue").innerText = response.dynamic_value;
