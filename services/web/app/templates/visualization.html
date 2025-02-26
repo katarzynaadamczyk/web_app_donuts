@@ -22,11 +22,58 @@
             font-weight: bold;
             margin-top: 10px;
         }
+        .toggle-container {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(180px, 1fr)); 
+        gap: 10px;
+        max-width: 800px; 
+        }
+
+        .toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle:hover {
+            background: #e2e6ea;
+        }
+
+        @media (max-width: 500px) {
+            .toggle-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .separator {
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(to right, #007bff, #00d4ff);
+            margin: 40px auto;
+            border-radius: 2px;
+        }
+
+        .chart-container {
+            text-align: center;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .chart-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <h2>Donuts Visualization</h2>
-
+    <h2>Choosing algorithm parameters</h2>
     <!-- Controls section -->
     <div class="controls">
         <!-- Toggle -->
@@ -34,13 +81,30 @@
             <input type="checkbox" id="toggleSwitch"> Algorithm choice (on - algorithm with unlimited number of donuts, off - algorithm 0-1 donut)
         </label>
         
-        <!-- Suwak -->
+        <!-- Slider -->
         <label>
             How many grams of donuts would you like to eat? 
             <input type="range" id="slider" min="60" max="500" value="150">
             <span id="sliderValue">150</span>
         </label>
+
+        
+        <!-- Slider -->
+        <label>
+            Which donuts would you like to consider?
+            <div class="toggle-container">
+                {% for donut in donuts %}
+                    <label class="toggle">
+                        <input type="checkbox" class="donut-checkbox" value="{{ donut[0] }}">
+                        {{ donut[1] }}
+                    </label>
+                {% endfor %}
+            </div>
+        </label>
+
     </div>
+    <div class="separator"></div>
+    <h2>Donuts Visualization</h2>
 
     <!-- Miejsce na dynamiczną wartość -->
     <div class="output">
@@ -63,15 +127,21 @@
             updateChart();
         };
 
+        $(".donut-checkbox").change(updateChart);
+
         function updateChart() {
             let toggle = document.getElementById("toggleSwitch").checked;
             let sliderValue = document.getElementById("slider").value;
+            let selectedDonuts = [];
+            $(".donut-checkbox:checked").each(function () {
+                selectedDonuts.push($(this).val());
+            });
 
             $.ajax({
                 url: "/update_chart",
                 type: "POST",
                 contentType: "application/json",
-                data: JSON.stringify({ toggle: toggle, slider: sliderValue }),
+                data: JSON.stringify({ toggle: toggle, slider: sliderValue, selected: selectedDonuts }),
                 success: function(response) {
                     Plotly.newPlot("chart", response.data);
                     document.getElementById("dynamicValue").innerText = response.dynamic_value;

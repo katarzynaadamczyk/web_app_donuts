@@ -6,7 +6,7 @@ from flask import Blueprint, current_app, jsonify, render_template, request
 import numpy as np
 from sqlalchemy import select
 from .models import Donuts, Manufacturers
-from .utils import generate_chart, get_all_available_donuts, get_all_available_manufacturers
+from .utils import generate_chart, get_all_available_donuts, get_all_available_manufacturers, get_all_donuts_names
 
 
 # keep application blueprint
@@ -47,7 +47,7 @@ def donuts_to_eat():
     '''
     return JSON for rest
     '''
-    return render_template("visualization.html")
+    return render_template("visualization.html", donuts=get_all_donuts_names())
 
 
 @main.route("/update_chart", methods=["POST"])
@@ -55,8 +55,9 @@ def update_chart():
     data = request.get_json()
     toggle = data.get("toggle", False)
     slider_value = int(data.get("slider", 50))
+    selected_donuts = data.get("selected", [])
 
-    new_chart, kcal = generate_chart(toggle, slider_value)
+    new_chart, kcal = generate_chart(toggle, slider_value, selected_donuts)
 
     return jsonify(data=new_chart, dynamic_value=kcal)
 
