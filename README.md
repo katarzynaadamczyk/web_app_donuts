@@ -14,7 +14,7 @@ Web application in Flask integrated with postgreSQL database working in Docker c
 
 ## General info
 
-Actually (22/2/2025) works adding bakeries and donuts to the database by reading data from web pages listed in database.json. Algorithms also work and are implemented in an endpoint. 
+Actually (27/2/2025) works adding bakeries and donuts to the database by reading data from web pages listed in database.json. Algorithms also work and are implemented in an endpoint. User can choose available donuts he wants to consider.
 
 Working endpoint:
 
@@ -105,10 +105,7 @@ Under development.
 
 To do:
 
-- users choosing which donuts he wants to consider
 - more tests
-- add users (authorization and so on)
-- adding data about user's checking donuts to buy
 - check production server
 - final tests
 - final readme update
