@@ -26,7 +26,8 @@ def test_get_all_available_donuts(app_with_db):
     '''
     with app_with_db.app_context():
         donuts = get_all_available_donuts()
-        assert len(donuts) == 16
+        # change 16 to 14 on 24.03 -> changed in manufacurer's product list
+        assert len(donuts) == 14 
 
 
 def test_get_correct_donuts_parameters_for_Putka(app_with_db):
@@ -68,7 +69,7 @@ def test_get_correct_donuts_parameters_for_Oskroba(app_with_db):
         stmt = select(Donuts.name, Donuts.kcal, Donuts.weight, Manufacturers.name)\
                 .where(and_(Donuts.manufacturer_id == Manufacturers.id, Manufacturers.name == 'Oskroba'))
         results = db.session.execute(stmt).all()
-        assert len(results) == 5
+        assert len(results) == 3
         
         stmt = select(Donuts.name, Donuts.kcal, Donuts.weight, Manufacturers.name)\
                 .where(and_(Donuts.manufacturer_id == Manufacturers.id, Manufacturers.name == 'Oskroba', Donuts.name == 'Pączek'))
@@ -80,11 +81,11 @@ def test_get_correct_donuts_parameters_for_Oskroba(app_with_db):
         assert results[0][3] == 'Oskroba'
 
         stmt = select(Donuts.name, Donuts.kcal, Donuts.weight, Manufacturers.name)\
-                .where(and_(Donuts.manufacturer_id == Manufacturers.id, Manufacturers.name == 'Oskroba', Donuts.name == 'Pączek z bitą śmietaną'))
+                .where(and_(Donuts.manufacturer_id == Manufacturers.id, Manufacturers.name == 'Oskroba', Donuts.name == 'Pączek z adwokatem'))
         results = db.session.execute(stmt).all()
         assert len(results) == 1
-        assert results[0][0] == 'Pączek z bitą śmietaną'
-        assert results[0][1] == 282.8
+        assert results[0][0] == 'Pączek z adwokatem'
+        assert results[0][1] == 284.2
         assert results[0][2] == 70
         assert results[0][3] == 'Oskroba'
 

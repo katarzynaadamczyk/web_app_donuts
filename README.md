@@ -107,6 +107,7 @@ To do:
 
 - users choosing which donuts he wants to consider
 - more tests
+- tests checking db independently from manufacturer's changed on web pages
 - add users (authorization and so on)
 - adding data about user's checking donuts to buy
 - check production server

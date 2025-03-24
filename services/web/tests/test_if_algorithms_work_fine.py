@@ -25,7 +25,7 @@ def test_pick_me_donuts_unlimited_all_donuts_available(app_with_db):
         assert round(results[0], 2) == 814.00
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 1
-        assert results[1] == {14: 2}
+        assert results[1] == {12: 2}
         
         results = solver.pick_me_donuts_unlimited(donuts, 250)
 
@@ -34,7 +34,7 @@ def test_pick_me_donuts_unlimited_all_donuts_available(app_with_db):
         assert round(results[0], 2) == 975.40
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 2
-        assert results[1] == {10: 2, 14: 1}
+        assert results[1] == {10: 2, 12: 1}
 
 
 def test_pick_me_donuts_unlimited_only_Putka_donuts(app_with_db):
@@ -63,7 +63,7 @@ def test_pick_me_donuts_unlimited_only_Putka_donuts(app_with_db):
         assert round(results[0], 2) == 893.80
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 2
-        assert results[1] == {4: 2, 6: 1}
+        assert results[1] == {3: 2, 6: 1}
 
 
 def test_pick_me_donuts_unlimited_only_Oskroba_donuts(app_with_db):
@@ -83,7 +83,7 @@ def test_pick_me_donuts_unlimited_only_Oskroba_donuts(app_with_db):
         assert round(results[0], 2) == 673.20
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 1
-        assert results[1] == {12: 2}
+        assert results[1] == {11: 2}
 
         # second test
         results = solver.pick_me_donuts_unlimited(donuts, 250)
@@ -93,7 +93,7 @@ def test_pick_me_donuts_unlimited_only_Oskroba_donuts(app_with_db):
         assert round(results[0], 2) == 957.40
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 2
-        assert results[1] == {10: 1, 12: 2}
+        assert results[1] == {10: 1, 11: 2}
 
 
 def test_pick_me_donuts_unlimited_only_Grzybki_donuts(app_with_db):
@@ -114,7 +114,7 @@ def test_pick_me_donuts_unlimited_only_Grzybki_donuts(app_with_db):
         assert round(results[0], 2) == 814.00
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 1
-        assert results[1] == {14: 2}
+        assert results[1] == {12: 2}
         
         # second test
         results = solver.pick_me_donuts_unlimited(donuts, 250)
@@ -124,7 +124,7 @@ def test_pick_me_donuts_unlimited_only_Grzybki_donuts(app_with_db):
         assert round(results[0], 2) == 814.00
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 1
-        assert results[1] == {14: 2}
+        assert results[1] == {12: 2}
 
 
 def test_pick_me_donuts_0_1_all_donuts(app_with_db):
@@ -143,16 +143,16 @@ def test_pick_me_donuts_0_1_all_donuts(app_with_db):
         assert round(results[0], 2) == 813.00
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 2
-        assert results[1] == {14: 1, 15: 1}
+        assert results[1] == {12: 1, 13: 1}
 
         # second test
         results = solver.pick_me_donuts_0_1(donuts, 250)
         assert len(results) == 2
         assert type(results[0]) == type(1.5)
-        assert round(results[0], 2) == 974.00
+        assert round(results[0], 2) == 952.00
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 3
-        assert results[1] == {10: 1, 11: 1, 14: 1}
+        assert results[1] == {3: 1, 10: 1, 11: 1}
 
 
 def test_pick_me_donuts_0_1_Putka_donuts(app_with_db):
@@ -172,7 +172,7 @@ def test_pick_me_donuts_0_1_Putka_donuts(app_with_db):
         assert round(results[0], 2) == 665.20
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 2
-        assert results[1] == {4: 1, 5: 1}
+        assert results[1] ==  {3: 1, 4: 1}
 
         # second test
         results = solver.pick_me_donuts_0_1(donuts, 250)
@@ -182,7 +182,7 @@ def test_pick_me_donuts_0_1_Putka_donuts(app_with_db):
         assert round(results[0], 2) == 892.00
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 3
-        assert results[1] == {3: 1, 4: 1, 6: 1}
+        assert results[1] ==  {2: 1, 3: 1, 6: 1}
 
 
 
@@ -199,19 +199,19 @@ def test_pick_me_donuts_0_1_Oskroba_donuts(app_with_db):
         results = solver.pick_me_donuts_0_1(donuts, 200)
         assert len(results) == 2
         assert type(results[0]) == type(1.5)
-        assert round(results[0], 2) == 667.80
+        assert round(results[0], 2) == 620.8
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 2
-        assert results[1] == {12: 1, 13: 1}
+        assert results[1] == {10: 1, 11: 1}
 
         # second test
         results = solver.pick_me_donuts_0_1(donuts, 250)
         assert len(results) == 2
         assert type(results[0]) == type(1.5)
-        assert round(results[0], 2) == 952.00
+        assert round(results[0], 2) == 855.3
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 3
-        assert results[1] == {10: 1, 12: 1, 13: 1}
+        assert results[1] == {9: 1, 10: 1, 11: 1}
 
 
 def test_pick_me_donuts_0_1_Grzybki_donuts(app_with_db):
@@ -231,7 +231,7 @@ def test_pick_me_donuts_0_1_Grzybki_donuts(app_with_db):
         assert round(results[0], 2) == 813.00
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 2
-        assert results[1] == {14: 1, 15: 1}
+        assert results[1] == {12: 1, 13: 1}
 
         # second test
         results = solver.pick_me_donuts_0_1(donuts, 250)
@@ -240,4 +240,4 @@ def test_pick_me_donuts_0_1_Grzybki_donuts(app_with_db):
         assert round(results[0], 2) == 813.00
         assert type(results[1]) == type(dict())
         assert len(results[1]) == 2
-        assert results[1] == {14: 1, 15: 1}
+        assert results[1] == {12: 1, 13: 1}
